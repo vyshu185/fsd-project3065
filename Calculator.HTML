@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>React Button Calculator</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f7f7f7;
+        text-align: center;
+        padding: 40px;
+      }
+
+      #calculator {
+        display: inline-block;
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+      }
+
+      .display {
+        width: 100%;
+        font-size: 24px;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        text-align: right;
+        border-radius: 6px;
+      }
+
+      .button-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 60px);
+        gap: 10px;
+        justify-content: center;
+      }
+
+      button {
+        padding: 15px;
+        font-size: 18px;
+        border: none;
+        background-color: #007bff;
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      .operator {
+        background-color: #28a745;
+      }
+
+      .operator:hover {
+        background-color: #1e7e34;
+      }
+
+      .equals {
+        background-color: orange;
+      }
+
+      .clear {
+        background-color: #dc3545;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>React Calculator with Buttons</h2>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      function Calculator() {
+        const [input, setInput] = React.useState('');
+        const [result, setResult] = React.useState('');
+
+        const handleClick = (value) => {
+          if (value === '=') {
+            try {
+              setResult(eval(input).toString());
+            } catch {
+              setResult("Error");
+            }
+          } else if (value === 'C') {
+            setInput('');
+            setResult('');
+          } else {
+            setInput((prev) => prev + value);
+          }
+        };
+
+        const buttons = [
+          '7', '8', '9', '/',
+          '4', '5', '6', '*',
+          '1', '2', '3', '-',
+          '0', '.', '=', '+',
+          'C',
+		  
+        ];
+
+        return (
+          <div id="calculator">
+            <div className="display">
+              {result || input || '0'}
+            </div>
+            <div className="button-grid">
+              {buttons.map((btn) => (
+                <button
+                  key={btn}
+                  onClick={() => handleClick(btn)}
+                  className={
+                    btn === '=' ? 'equals' :
+                    btn === 'C' ? 'clear' :
+                    ['+', '-', '*', '/'].includes(btn) ? 'operator' : ''
+                  }
+                >
+                  {btn}
+                </button>
+              ))}
+            </div>
+          </div>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<Calculator />);
+    </script>
+  </body>
+</html>
